@@ -6,7 +6,7 @@ import { login, authlogin } from '../actions/authentication';
 import { connect } from 'react-redux';
 import { AlertBanner } from '@thumbtack/thumbprint-react';
 import toast, { Toaster } from 'react-hot-toast';
-import { GoogleLogin } from 'react-google-login';
+//import { GoogleLogin } from 'react-google-login';
 //import { gapi } from 'gapi-script';
 import Constants from '../Constants';
 
@@ -83,7 +83,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
                                     type="text"
                                     placeholder="Username"
                                     aria-describedby="inputGroupPrepend"
-                                        autocomplete="username"
+                                    autoComplete="username"
                                     required
                                     value={username}
                                     onChange={(event) => { setUsername(event.target.value); }}
@@ -101,7 +101,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
                                     placeholder="Password"
                                     required
                                     value={password}
-                                    autocomplete="current-password"
+                                    autoComplete="current-password"
                                 onChange={(event) => { setPassword(event.target.value); }} />
                             <Form.Control.Feedback type="invalid">Please provide a valid password.</Form.Control.Feedback>
                         </Form.Group>
@@ -123,6 +123,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
                         <Form.Text className='fw-light' style={{ textAlign: "center" }}><Link to={"/password-recovery"}>Forgot password?</Link></Form.Text>
                     </div>
                     </Form>
+                    {/* 
                     <div className='d-flex justify-content-center mt-5 aligns-items-center'>
                         <GoogleLogin
                             clientId={clientId}
@@ -133,6 +134,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
                             isSignedIn={false}
                         />
                     </div>
+                */}
             </div>
             :
             <Navigate to='/' />

@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-)1&9&9%rr86^%81ok#n(pu_jiwi$4d^4oyi^#eu)m$or618#s4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*'
+]
 
 
 # Application definition
@@ -61,12 +63,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mosguito.urls'
 
+print(os.path.join(BASE_DIR, 'templates'))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build'),
-                 os.path.join(BASE_DIR, 'templates')],
-        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        #'DIRS': [os.path.join(BASE_DIR, 'build'),
+        #         os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -176,4 +180,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MOSCA_FLASK_URL = 'http://127.0.0.1:5000/'
-MOSGUITO_SITE_URL="https://127.0.0.1"
+SITE_URL="https://127.0.0.1:8000"

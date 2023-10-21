@@ -8,7 +8,7 @@ const CSRFToken = () => {
     useEffect( () => {
         const fetchData = async () => {
             try {
-                await axios.get(Constants.sddb_api_url + 'authentication/csrf_cookie');
+                await axios.get(Constants.mosguito_api_url + 'authentication/csrf_cookie');
             } catch (err) {
                 console.log("Error setting the CSRF cookie");
             }
@@ -16,7 +16,7 @@ const CSRFToken = () => {
 
         fetchData();
     }, []);
-
+    
     return (
         <input type='hidden' name='csrfmiddlewaretoken' value={Cookies.get('csrftoken')} />
     );

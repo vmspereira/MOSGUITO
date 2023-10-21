@@ -16,10 +16,10 @@ npm run build
 
 The backend is fed from a MySQL or MariaDB database. A list of the 
 changes made to the database can be found at 
-<u>/backend/sddb/README.md</u>
+<u>/backend/moscaweb/README.md</u>
 
 For the authentication module to be fully functional you need to 
-follow the instructions at <u>/backend/sddb/authentication/README.md</u>
+follow the instructions at <u>/backend/moscaweb/authentication/README.md</u>
 
 ```console
 cd backend

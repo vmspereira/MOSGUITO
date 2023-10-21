@@ -15,14 +15,6 @@ import {
     DELETE_USER_FAIL,
     LOAD_USER_PROFILE_SUCCESS,
     LOAD_USER_PROFILE_FAIL,
-    ADD_COMMENT_SUCCESS,
-    ADD_COMMENT_FAIL,
-    DELETE_COMMENT_SUCCESS,
-    DELETE_COMMENT_FAIL,
-    ADD_RATING_SUCCESS,
-    ADD_RATING_FAIL,
-    UPDATE_RATING_SUCCESS,
-    UPDATE_RATING_FAIL,
     PASSWORD_UPDATE_SUCCESS,
     PASSWORD_UPDATE_FAIL,
     PASSWORD_RECOVERY_SUCCESS,
@@ -35,7 +27,6 @@ import {
     DELETE_SOLUTION_FAIL,
 } from './types';
 
-
 export const load_user = () => async (dispatch) => {
     const config = {
         headers: {
@@ -45,7 +36,7 @@ export const load_user = () => async (dispatch) => {
     };
 
     try {
-        const res = await axios.get(Constants.sddb_api_url + 'authentication/user', config);
+        const res = await axios.get(Constants.mosguito_api_url + 'authentication/user', config);
 
 
         if (res.data.error) {
@@ -77,7 +68,7 @@ export const checkAuthenticated = () => async (dispatch) => {
     };
 
     try {
-        const res = await axios.get(Constants.sddb_api_url + 'authentication/authenticated', config);
+        const res = await axios.get(Constants.mosguito_api_url + 'authentication/authenticated', config);
 
         if (res.data.error || res.data.isAuthenticated === 'error') {
             dispatch({
@@ -118,10 +109,12 @@ export const login = (username, password) => async (dispatch) => {
         }
     };
 
+    console.log(config);
+
     const body = JSON.stringify({ username, password });
 
     try {
-        const res = await axios.post(Constants.sddb_api_url + 'authentication/login', body, config);
+        const res = await axios.post(Constants.mosguito_api_url + 'authentication/login', body, config);
 
         if (res.data.success) {
             dispatch({
@@ -156,7 +149,7 @@ export const authlogin = async (email, first_name, last_name) => {
     const body = JSON.stringify({ email, first_name, last_name });
 
     try {
-        const url = Constants.sddb_api_url + 'authentication/authlogin'
+        const url = Constants.mosguito_api_url + 'authentication/authlogin'
         const res = await axios.post(url, body, config);
 
         if (res.data.success) {
@@ -187,7 +180,7 @@ export const verify = (uid, token) => async dispatch => {
     };
 
     try {
-        await axios.get(Constants.sddb_api_url + 'authentication/activation/' + uid + "/" + token, config);
+        await axios.get(Constants.mosguito_api_url + 'authentication/activation/' + uid + "/" + token, config);
 
         dispatch({
             type: ACTIVATION_SUCCESS,
@@ -213,7 +206,7 @@ export const password_recovery = (username) => async dispatch => {
     });
 
     try {
-        const res = await axios.post(Constants.sddb_api_url + 'authentication/password-recovery', body, config);
+        const res = await axios.post(Constants.mosguito_api_url + 'authentication/password-recovery', body, config);
 
         if (res.data.success) {
             dispatch({
@@ -247,7 +240,7 @@ export const password_update = (uid, token, password1, password2) => async dispa
     });
 
     try {
-        const res = await axios.post(Constants.sddb_api_url + 'authentication/password-update/' + uid + "/" + token, body, config);
+        const res = await axios.post(Constants.mosguito_api_url + 'authentication/password-update/' + uid + "/" + token, body, config);
 
         if (res.data.success) {
             dispatch({
@@ -283,7 +276,7 @@ export const logout = () => async dispatch => {
     });
 
     try {
-        const res = await axios.post(Constants.sddb_api_url + 'authentication/logout', body, config);
+        const res = await axios.post(Constants.mosguito_api_url + 'authentication/logout', body, config);
 
         if (res.data.success) {
             dispatch({
@@ -319,7 +312,7 @@ export const delete_user = () => async dispatch => {
     });
 
     try {
-        const res = await axios.delete(Constants.sddb_api_url + 'authentication/delete', config, body);
+        const res = await axios.delete(Constants.mosguito_api_url + 'authentication/delete', config, body);
 
         if (res.data.success) {
             dispatch({
@@ -340,157 +333,13 @@ export const delete_user = () => async dispatch => {
     }
 };
 
-export const add_comment = (new_comment, private_comment, solution_id) => async dispatch => {
-
-    try {
-        const res = await axios({
-            method: 'post',
-            url: Constants.sddb_api_url + 'authentication/add-comment',
-            data: {
-                comment: new_comment,
-                solution_id: solution_id,
-                private: private_comment
-            },
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
-        });
-
-        if (res.data.success) {
-            dispatch({
-                type: ADD_COMMENT_SUCCESS,
-                message: null
-            });
-        } else {
-            dispatch({
-                type: ADD_COMMENT_FAIL,
-                message: res.data.error
-            });
-        }
-    } catch (err) {
-        dispatch({
-            type: ADD_COMMENT_FAIL,
-            message: "Something went wrong when trying to add a comment. Please try again later."
-        });
-    }
-};
-
-export const delete_comment = (comment) => async dispatch => {
-
-    try {
-        const res = await axios({
-            method: 'delete',
-            url: Constants.sddb_api_url + 'authentication/delete-comment',
-            data: {
-                comment: comment,
-                'withCredentials': true
-            },
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
-        });
-
-        if (res.data.success) {
-            dispatch({
-                type: DELETE_COMMENT_SUCCESS,
-                message: null
-            });
-        } else {
-            dispatch({
-                type: DELETE_COMMENT_FAIL,
-                message: res.data.error
-            });
-        }
-    } catch (err) {
-        dispatch({
-            type: DELETE_COMMENT_FAIL,
-            message: "Something went wrong when trying to delete the comment. Please try again later."
-        });
-    }
-};
-
-export const add_rating = (rating, solution_id) => async dispatch => {
-
-    try {
-        const res = await axios({
-            method: 'post',
-            url: Constants.sddb_api_url + 'authentication/add-rating',
-            data: {
-                rating: rating,
-                solution_id: solution_id
-            },
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
-        });
-
-        if (res.data.success) {
-            dispatch({
-                type: ADD_RATING_SUCCESS,
-                message: null
-            });
-        } else {
-            dispatch({
-                type: ADD_RATING_FAIL,
-                message: res.data.error
-            });
-        }
-    } catch (err) {
-        dispatch({
-            type: ADD_RATING_FAIL,
-            message: "Something went wrong when trying to add the rating. Please try again later."
-        });
-    }
-};
-
-export const update_rating = (rating, solution_id) => async dispatch => {
-
-    try {
-        const res = await axios({
-            method: 'put',
-            url: Constants.sddb_api_url + 'authentication/update-rating',
-            data: {
-                rating: rating,
-                solution_id: solution_id
-            },
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
-        });
-
-        if (res.data.success) {
-            dispatch({
-                type: UPDATE_RATING_SUCCESS,
-                message: null
-            });
-        } else {
-            dispatch({
-                type: UPDATE_RATING_FAIL,
-                message: res.data.error
-            });
-        }
-    } catch (err) {
-        dispatch({
-            type: UPDATE_RATING_FAIL,
-            message: "Something went wrong when trying to update the rating. Please try again later."
-        });
-    }
-};
 
 export const update_username = (username) => async dispatch => {
 
     try {
         const res = await axios({
             method: 'put',
-            url: Constants.sddb_api_url + 'authentication/update-username',
+            url: Constants.mosguito_api_url + 'authentication/update-username',
             data: {
                 username: username
             },
@@ -526,7 +375,7 @@ export const update_user_info = (first_name, last_name) => async dispatch => {
     try {
         const res = await axios({
             method: 'put',
-            url: Constants.sddb_api_url + 'authentication/update-user-info',
+            url: Constants.mosguito_api_url + 'authentication/update-user-info',
             data: {
                 first_name: first_name,
                 last_name: last_name
@@ -572,7 +421,7 @@ export const remove_solution = (solution_id) => async dispatch => {
     });
 
     try {
-        const res = await axios.post(Constants.sddb_api_url + 'authentication/delete-solution', body, config);
+        const res = await axios.post(Constants.mosguito_api_url + 'authentication/delete-solution', body, config);
 
         if (res.data.error) {
             dispatch({

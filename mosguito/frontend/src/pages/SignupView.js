@@ -35,7 +35,7 @@ const SignupView = () => {
         const body = JSON.stringify({ username, email, first_name, last_name, password1, password2 });
     
         try {
-            const res = await axios.post(Constants.sddb_api_url + 'authentication/register', body, config);
+            const res = await axios.post(Constants.mosguito_api_url + 'authentication/register', body, config);
 
             if (res.data.error) {
                 setMessage(res.data.error);

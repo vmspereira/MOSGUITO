@@ -67,7 +67,7 @@ const PasswordUpdateView = ({ password_update, message }) => {
                             :
                             <>
                                 {message === null &&
-                                    window.open(Constants.sddb_api_url + "utilities/password-update-success/", "_top")
+                                    window.open(Constants.mosguito_api_url + "utilities/password-update-success/", "_top")
                                 }
                             </>
                         }

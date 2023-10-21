@@ -60,13 +60,13 @@ class SignupView(APIView):
                         format_dictionary = {'name': first_name, 'url': activation_url}
 
                         message = "Dear {name},\n\nWelcome to the Strain Design DataBase. \n\nYour " \
-                                  "registration at SDDB is almost complete. The next step is for you to activate " \
+                                  "registration at MOSGUITO is almost complete. The next step is for you to activate " \
                                   "the account which can be done through the following link:\n\n{url}\n\n" \
-                                  "Kind regards,\n\nThe SDDB Team.".format(**format_dictionary)
+                                  "Kind regards,\n\nThe MOSGUITO Team.".format(**format_dictionary)
 
                         try:
                             email_message = EmailMessage(
-                                subject="SDDB Account",
+                                subject="MOSGUITO Account",
                                 body=message,
                                 to=[email]
                             )
@@ -130,11 +130,11 @@ class PasswordRecoveryView(APIView):
             format_dictionary = {'name': user.first_name, 'url': activation_url}
 
             message = "Dear {name},\n\nYour password recovery request is almost complete. You can set your new password " \
-                      "through the following link:\n\n{url}\n\nKind regards,\n\nThe SDDB Team.".format(**format_dictionary)
+                      "through the following link:\n\n{url}\n\nKind regards,\n\nThe MOSGUITO Team.".format(**format_dictionary)
 
             try:
                 email_message = EmailMessage(
-                    subject="SDDB Password Recovery",
+                    subject="MOSGUITO Password Recovery",
                     body=message,
                     to=[user.email]
                 )
