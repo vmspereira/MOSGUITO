@@ -23,6 +23,8 @@ follow the instructions at <u>/backend/moscaweb/authentication/README.md</u>
 
 ```console
 cd backend
+python manage.py migrate
+python manage.py createsuperuser --username=user --email=user@mosguito.com
 python manage.py runserver
 ```
 
