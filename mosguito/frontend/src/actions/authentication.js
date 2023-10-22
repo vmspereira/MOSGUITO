@@ -102,6 +102,7 @@ export const checkAuthenticated = () => async (dispatch) => {
 
 export const login = (username, password) => async (dispatch) => {
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -139,6 +140,7 @@ export const login = (username, password) => async (dispatch) => {
 export const authlogin = async (email, first_name, last_name) => {
 
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -264,6 +266,7 @@ export const password_update = (uid, token, password1, password2) => async dispa
 export const logout = () => async dispatch => {
 
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -300,6 +303,7 @@ export const logout = () => async dispatch => {
 export const delete_user = () => async dispatch => {
 
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -343,6 +347,7 @@ export const update_username = (username) => async dispatch => {
             data: {
                 username: username
             },
+            withCredentials: true,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -380,6 +385,7 @@ export const update_user_info = (first_name, last_name) => async dispatch => {
                 first_name: first_name,
                 last_name: last_name
             },
+            withCredentials: true,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -409,6 +415,7 @@ export const update_user_info = (first_name, last_name) => async dispatch => {
 
 export const remove_solution = (solution_id) => async dispatch => {
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

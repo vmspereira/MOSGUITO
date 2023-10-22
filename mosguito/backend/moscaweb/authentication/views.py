@@ -23,7 +23,7 @@ class GetCSRFToken(APIView):
         return Response({'success': 'CSRF cookie set'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SignupView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -180,7 +180,7 @@ class PasswordUpdateView(APIView):
             return Response({"error": "Something went wrong when updating the password"})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -213,7 +213,7 @@ class LoginView(APIView):
             else:
                 return Response({'error': 'Something went wrong when logging in'})
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class AuthLoginView(APIView):
 
     def post(self, request, format=None):
@@ -242,7 +242,7 @@ class AuthLoginView(APIView):
             return Response({'error': 'Something went wrong when logging in'})
         
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class LogoutView(APIView):
     def post(self, request, format=None):
         try:
@@ -252,7 +252,7 @@ class LogoutView(APIView):
             return Response({'error': 'Something went wrong when logging out'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class CheckAuthenticatedView(APIView):
 
     def get(self, request, format=None):
@@ -269,7 +269,7 @@ class CheckAuthenticatedView(APIView):
             return Response({'error': 'Something went wrong when checking authentication status'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class DeleteUserView(APIView):
 
     def delete(self, request, format=None):
@@ -307,7 +307,7 @@ class GetUserView(APIView):
             return Response({'error': 'Something went wrong when retrieving user information'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class UpdateUserInfoView(APIView):
     def put(self, request, format=None):
         try:
@@ -325,7 +325,7 @@ class UpdateUserInfoView(APIView):
             return Response({"error": "Something went wrong when updating profile"})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class UpdateUsernameView(APIView):
 
     def put(self, request, format=None):
