@@ -110,8 +110,6 @@ export const login = (username, password) => async (dispatch) => {
         }
     };
 
-    console.log(config);
-
     const body = JSON.stringify({ username, password });
 
     try {

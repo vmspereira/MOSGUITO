@@ -2,7 +2,6 @@
 
 const Constants = {
     mosguito_api_url: "http://127.0.0.1:8000/",
-    googleClientId: ''
 }
 
 export default Constants

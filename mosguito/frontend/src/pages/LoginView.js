@@ -8,7 +8,7 @@ import { AlertBanner } from '@thumbtack/thumbprint-react';
 import toast, { Toaster } from 'react-hot-toast';
 //import { GoogleLogin } from 'react-google-login';
 //import { gapi } from 'gapi-script';
-import Constants from '../Constants';
+//import Constants from '../Constants';
 
 
 const LoginView = ({ login, isAuthenticated, message }) => {
@@ -18,7 +18,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
     const [validated, setValidated] = useState(false);
     const [displayWarning, setDisplayWarning] = useState(false);
 
-    const clientId = Constants.googleClientId;
+    // const clientId = Constants.googleClientId;
 
     /*
     useEffect(() => {
@@ -42,9 +42,7 @@ const LoginView = ({ login, isAuthenticated, message }) => {
         },
     );
 
-    const onGoogleLoginFailure = ()=>{
-
-    }
+    //const onGoogleLoginFailure = ()=>{}
 
     const handleSubmit = (event) => {
 
