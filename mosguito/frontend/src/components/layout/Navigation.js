@@ -19,6 +19,18 @@ const Navigation = ({ isAuthenticated, first_name, logout }) => {
                             <li className="nav-item">
                                 <Link className="navbar-brand" to="/"><img src={mosca} alt="MOSCA" height="40" /></Link>
                             </li>
+                            {isAuthenticated ?
+                            <li>
+                                <Nav>
+                                    <Whisper placement="right" trigger="hover" speaker={
+                                        <Tooltip>New Run</Tooltip>
+                                    }>
+                                    <Link className="navbar-brand" to="/config/">Mosca</Link>
+                                    </Whisper>
+                                </Nav>
+                            </li>
+                                : <></>
+                            }
                         </ul>
                         {isAuthenticated ?
                             <>

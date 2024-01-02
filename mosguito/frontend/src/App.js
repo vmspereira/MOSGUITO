@@ -9,6 +9,7 @@ import InfoView from "./pages/InfoView";
 import PasswordRecoveryView from './pages/PasswordRecoveryView';
 import PasswordUpdateView from './pages/PasswordUpdateView';
 import PersonalAreaView from './pages/PersonalAreaView';
+import ConfigurationView from './pages/ConfigurationView';
 import "./App.css";
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
         <Route path="password-recovery" element={<PasswordRecoveryView />} />
         <Route path="password-update/:uid/:token" element={<PasswordUpdateView />} />
         <Route path="about" element={<InfoView />} />
+        <Route path="config" element={<ConfigurationView />} />
+        
         </Routes>
     </Layout>
 
