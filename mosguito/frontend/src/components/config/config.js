@@ -1,11 +1,10 @@
 import React from 'react'
 import YAML from 'yaml'
 import {
-  Card,
   CardActions
 } from '@material-ui/core'
-import {Row, Col, ButtonGroup } from "rsuite";
-import {Button} from 'react-bootstrap'
+import { Row, Col} from "rsuite";
+import { Button } from 'react-bootstrap'
 import LabelledTextField from "./LabelledTextField"
 import LabelledNumberField from "./LabelledNumberField"
 import LabelledCheckbox from "./LabelledCheckbox"
@@ -29,15 +28,15 @@ import {
 //import {DashboardLayout} from "../components/Layout";
 import Accordion from "./Accordion";
 import { Steps } from 'rsuite';
-import { Navigate, useParams } from 'react-router-dom';
 
-const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasMt, hasMp, toggleHasMp}) => {
+
+const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasMt, hasMp, toggleHasMp }) => {
 
   const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
   const [step, setStep] = React.useState(0);
   const onChange = nextStep => {
-      setStep(nextStep < 0 ? 0 : nextStep > 3 ? 3 : nextStep);
+    setStep(nextStep < 0 ? 0 : nextStep > 5 ? 5 : nextStep);
   };
 
   const onNext = () => onChange(step + 1);
@@ -46,7 +45,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
 
   const downloadJson = (ev) => {
     ev.preventDefault()
-    if (configData['doAssembly']) {onConfigChange('errorModel', 'complete')}
+    if (configData['doAssembly']) { onConfigChange('errorModel', 'complete') }
     const snake_case_values = {}
     Object.keys(configData).map((key) => snake_case_values[camelToSnakeCase(key)] = configData[key])
     download(JSON.stringify(snake_case_values, null, 2), 'config.json', 'json')
@@ -54,7 +53,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
 
   const downloadYaml = (ev) => {
     ev.preventDefault()
-    if (configData['doAssembly']) {onConfigChange('errorModel', 'complete')}
+    if (configData['doAssembly']) { onConfigChange('errorModel', 'complete') }
     const snake_case_values = {}
     Object.keys(configData).map((key) => snake_case_values[camelToSnakeCase(key)] = configData[key])
     download(YAML.stringify(snake_case_values, null), 'config.yaml', 'yaml')
@@ -75,55 +74,47 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
 
   return (
     <main>
-      <div style={{height:"40px"}}></div>
+      <div style={{ height: "40px" }}></div>
       <form>
-        <Card >
-          <CardActions
-            style={{
-              display: 'flex',
-              //justifyContent: 'flex-center'
-            }}
+        <div>
+          <Button className="m-2"
+            onClick={() => onConfigOverwrite(defaultValues)}
+            variant="dark"
           >
+            Set to default values
+          </Button>
 
-            <Button
-              onClick={() => onConfigOverwrite(defaultValues)}
-              variant="dark"
-            >
-              Set to default values
-            </Button>
+          <Button className="m-2"
+            onClick={() => onConfigOverwrite(emptyValues)}
+            variant="dark"
+          >
+            Clear values
+          </Button>
 
-            <Button
-              onClick={() => onConfigOverwrite(emptyValues)}
-              variant="dark"
-            >
-              Clear values
-            </Button>
+          <Button className="m-2"
+            onClick={(ev) => downloadYaml(ev)}
+            variant="secondary"
+          >
+            Download YAML
+          </Button>
 
-            <Button
-              onClick={(ev) => downloadYaml(ev)}
-              variant="secondary"
-            >
-              Download YAML
-            </Button>
+          <Button className="m-2"
+            onClick={(ev) => downloadJson(ev)}
+            variant="secondary"
+          >
+            Download JSON
+          </Button>
 
-            <Button
-              onClick={(ev) => downloadJson(ev)}
-              variant="secondary"
-            >
-              Download JSON
-            </Button>
-            
-            <p className='align-middle mt-2'>MOSCA {configData.version}</p>
-              
-          </CardActions>
+          <p className='align-middle m-4'>MOSCA {configData.version}</p>
 
-          {/******* */}
+        </div>
 
         <div>
-            <Steps className="container mt-5" current={step} vertical>
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>General Configuration</b></div>} 
-                description=
-                {step === 0 &&
+          <Steps className="container mt-5" current={step} vertical>
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>General Configuration</b></div>}
+              description=
+              {step === 0 &&
                 <div>
                   <LabelledTextField
                     label='Output directory'
@@ -155,7 +146,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     helpMessage='The maximum amount of memory to use for the analysis'
                   />
 
-                  
+
                   <div className='mt-4 mb-5'><h5>Preprocessing settings</h5></div>
                   <LabelledNumberField
                     label='Minimum read length'
@@ -170,7 +161,6 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     onChange={(ev) => onConfigChange('minimumReadAverageQuality', ev.target.valueAsNumber)}
                     helpMessage='The minimum average quality of the reads to keep. Reads with an average quality lower than this will be discarded.'
                   />
-
 
                   <div className='mt-4 mb-5'><h5>Assembly settings</h5></div>
 
@@ -193,7 +183,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                         />
 
                         <div className='mt-4 mb-5'><h5>Binning settings</h5></div>
-                        
+
                         <LabelledCheckbox
                           label='Perform iterative binning'
                           checked={configData.doIterativeBinning}
@@ -212,7 +202,6 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     ) : (<></>)
                   }
 
-                 
                   <div className='mt-4 mb-5'><h5>
                     Annotation settings
                   </h5></div>
@@ -220,12 +209,12 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                   {
                     configData.doAssembly ? (<></>) : (
                       <LabelledSelect
-                          label='Error model'
-                          value={configData.errorModel}
-                          onChange={(ev) => onConfigChange('errorModel', ev.target.value)}
-                          options={errorModelOptions}
-                          helpMessage='The error model to consider in gene calling, when not performing assembly. _5 and _10 represent expected 5% and 10% of erroneous base calls.'
-                        />
+                        label='Error model'
+                        value={configData.errorModel}
+                        onChange={(ev) => onConfigChange('errorModel', ev.target.value)}
+                        options={errorModelOptions}
+                        helpMessage='The error model to consider in gene calling, when not performing assembly. _5 and _10 represent expected 5% and 10% of erroneous base calls.'
+                      />
                     )
                   }
 
@@ -255,13 +244,13 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     helpMessage='Number of identifications per gene to report from sequence-homology annotation.'
                   />
 
-                  <div style={{ margin: '1rem 0'}}>
+                  <div style={{ margin: '1rem 0' }}>
                     <Accordion
                       title="Pick databases of reCOGnizer"
                       helpMessage='Databases to use as reference for domain-homology annotation of genes identified.'
                     >
                       {
-                        recognizerDatabasesOptions.map(( value, index) => (
+                        recognizerDatabasesOptions.map((value, index) => (
                           <LabelledCheckbox
                             key={index}
                             label={value}
@@ -269,7 +258,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                             setChecked={(ev) => handleCheck(value)}
                             variant="filled"
                           />
-                          )
+                        )
                         )
                       }
                     </Accordion>
@@ -282,7 +271,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     helpMessage='Whether to download the CDD resources for domain-homology annotation with reCOGnizer. Select only if these files are not available in the folder "resources_directory" (usually when running MOSCA for the first time).'
                   />
 
-                 
+
                   <div className='mt-4 mb-5'><h5>
                     Differential expression settings
                   </h5></div>
@@ -314,8 +303,8 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                           helpMessage='The minimum differential expression to test the null hypothesis, i.e., to determine if a difference in expression is relevant enough.'
                         />
 
-                       </>
-                    ):(<></>)
+                      </>
+                    ) : (<></>)
                   }
 
                   <div className='mt-4 mb-5'><h5>
@@ -329,64 +318,63 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     helpMessage='Whether the data contains MS spectra. If unchecked, proteomics analysis will be skipped.'
                   />
                   {
-                  hasMp ? (
-                    <>
-                      <LabelledSelect
-                        label='Proteomics workflow'
-                        value={configData.proteomicsWorkflow}
-                        onChange={(ev) => onConfigChange('proteomicsWorkflow', ev.target.value)}
-                        options={proteomicsWorkflowOptions}
-                        helpMessage='The proteomics workflow to use for proteomics analysis.'
-                      />
+                    hasMp ? (
+                      <>
+                        <LabelledSelect
+                          label='Proteomics workflow'
+                          value={configData.proteomicsWorkflow}
+                          onChange={(ev) => onConfigChange('proteomicsWorkflow', ev.target.value)}
+                          options={proteomicsWorkflowOptions}
+                          helpMessage='The proteomics workflow to use for proteomics analysis.'
+                        />
 
-                      <LabelledCheckbox
-                        label='Use cRAP database'
-                        checked={configData.useCrap}
-                        setChecked={(ev) => onConfigChange('useCrap', ev.target.checked)}
-                        helpMessage='Whether to use the cRAP database automatically retrieved by MOSCA, or use a custom contaminants database.'
-                      />
+                        <LabelledCheckbox
+                          label='Use cRAP database'
+                          checked={configData.useCrap}
+                          setChecked={(ev) => onConfigChange('useCrap', ev.target.checked)}
+                          helpMessage='Whether to use the cRAP database automatically retrieved by MOSCA, or use a custom contaminants database.'
+                        />
 
-                      {
-                        configData.useCrap ? (<></>) : (
-                          <LabelledTextField
-                            label='Contaminants database'
-                            value={configData.proteomicsContaminantesDatabase}
-                            onChange={(ev) => onConfigChange('proteomicsContaminantesDatabase', ev.target.value)}
-                            placeholder={defaultValues.proteomicsContaminantesDatabase}
-                            helpMessage='The custom contaminants database to use for proteomics analysis.'
-                          />
-                        )
-                      }
+                        {
+                          configData.useCrap ? (<></>) : (
+                            <LabelledTextField
+                              label='Contaminants database'
+                              value={configData.proteomicsContaminantesDatabase}
+                              onChange={(ev) => onConfigChange('proteomicsContaminantesDatabase', ev.target.value)}
+                              placeholder={defaultValues.proteomicsContaminantesDatabase}
+                              helpMessage='The custom contaminants database to use for proteomics analysis.'
+                            />
+                          )
+                        }
 
-                      <LabelledSelect
-                        label='Get proteomes for level'
-                        value={configData.referenceProteomesTaxaLevel}
-                        onChange={(ev) => onConfigChange('referenceProteomesTaxaLevel', ev.target.value)}
-                        options={referenceProteomesTaxaLevelOptions}
-                        helpMessage='The taxonomic level for which to retrieve reference proteomes, based on taxonomic characterization obtained with MetaPhlan2.'
-                      />
+                        <LabelledSelect
+                          label='Get proteomes for level'
+                          value={configData.referenceProteomesTaxaLevel}
+                          onChange={(ev) => onConfigChange('referenceProteomesTaxaLevel', ev.target.value)}
+                          options={referenceProteomesTaxaLevelOptions}
+                          helpMessage='The taxonomic level for which to retrieve reference proteomes, based on taxonomic characterization obtained with MetaPhlan2.'
+                        />
 
-                      <LabelledSelect
-                        label='Protease used'
-                        value={configData.protease}
-                        onChange={(ev) => onConfigChange('protease', ev.target.value)}
-                        options={proteaseOptions}
-                        helpMessage='The protease used in wet-lab proteomics analysis. If not in the list, select "File" and input the filename of the protease sequence in FASTA format.'
-                      />
-
-                      {
-                        ((configData.protease) !== "File") ? (<></>) : (
-                          <LabelledTextField
-                            label='Protease FASTA file'
-                            value={configData.proteaseFile}
-                            onChange={(ev) => onConfigChange('proteaseFile', ev.target.value)}
-                            placeholder={defaultValues.proteaseFile}
-                            helpMessage='The filename of the protease sequence in FASTA format.'
-                          />
-                        )
-                      }
-                    </>
-                  ):(<></>)
+                        <LabelledSelect
+                          label='Protease used'
+                          value={configData.protease}
+                          onChange={(ev) => onConfigChange('protease', ev.target.value)}
+                          options={proteaseOptions}
+                          helpMessage='The protease used in wet-lab proteomics analysis. If not in the list, select "File" and input the filename of the protease sequence in FASTA format.'
+                        />
+                        {
+                          ((configData.protease) !== "File") ? (<></>) : (
+                            <LabelledTextField
+                              label='Protease FASTA file'
+                              value={configData.proteaseFile}
+                              onChange={(ev) => onConfigChange('proteaseFile', ev.target.value)}
+                              placeholder={defaultValues.proteaseFile}
+                              helpMessage='The filename of the protease sequence in FASTA format.'
+                            />
+                          )
+                        }
+                      </>
+                    ) : (<></>)
                   }
 
                   <div className='mt-4 mb-5'><h5>
@@ -408,68 +396,66 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
                     helpMessage='The number of most abundant taxa for which genomic potential should be represented with KEGGCharter.'
                   />
 
-                  </div>
-                } />
-
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>Uniprot Columns</b></div>} 
-                description=
-                {step === 1 &&
-                <div>
-                    
                 </div>
-                } />
+              } />
 
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>Uniprot Databases</b></div>} 
-                description=
-                {step === 2 &&
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>Uniprot Columns</b></div>}
+              description=
+              {step === 1 &&
                 <div>
-                    
-                </div>
-                } />
 
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>KEGG Metabolic Maps</b></div>} 
-                description=
-                {step === 3 &&
+                </div>
+              } />
+
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>Uniprot Databases</b></div>}
+              description=
+              {step === 2 &&
                 <div>
-                    
-                </div>
-                } />
 
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>Experiments</b></div>} 
-                description=
-                {step === 4 &&
+                </div>
+              } />
+
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>KEGG Metabolic Maps</b></div>}
+              description=
+              {step === 3 &&
                 <div>
-                    
-                </div>
-                } />
 
-                <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}><b>Run</b></div>} 
-                description=
-                {step === 5 &&
+                </div>
+              } />
+
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>Experiments</b></div>}
+              description=
+              {step === 4 &&
+                <div>
+
+                </div>
+              } />
+
+            <Steps.Item title={<div className=" fw-light align-items-top" style={{ fontSize: "18px" }}>
+              <b>Run</b></div>}
+              description=
+              {step === 5 &&
                 <Col>
-                    <Row>
-                    Run the Configuration.
-                    </Row>
-                    <Row><Button>Run</Button></Row>
+                  <Row><Button variant="dark">Run the Configuration</Button></Row>
                 </Col>
-                } />
+              } />
 
-            </Steps>
-            <hr />
+          </Steps>
+          <hr />
 
-            <CardActions>
-                <Button onClick={onPrevious} disabled={step === 0}>
-                    Previous Step
-                </Button>
-                <Button onClick={onNext} disabled={step === 5}>
-                    Next Step
-                </Button>
-            </CardActions>
+          <div>
+            <Button className="m-4" onClick={onPrevious} disabled={step === 0} variant="dark">
+              Previous Step
+            </Button>
+            <Button className="m-4" onClick={onNext} disabled={step === 5} variant="dark">
+              Next Step
+            </Button>
+          </div>
         </div>
-
-        {/******* */}
-
-        </Card>
       </form>
     </main>
   )
@@ -477,19 +463,17 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
 
 function Config({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasMt, hasMp, toggleHasMp }) {
   return (
-    //<DashboardLayout>
-      <div>
-        <Main
-          configData={configData}
-          onConfigChange={onConfigChange}
-          onConfigOverwrite={onConfigOverwrite}
-          hasMt={hasMt}
-          toggleHasMt={toggleHasMt}
-          hasMp={hasMp}
-          toggleHasMp={toggleHasMp}
-        />
-      </div>
-    //</DashboardLayout>
+    <div>
+      <Main
+        configData={configData}
+        onConfigChange={onConfigChange}
+        onConfigOverwrite={onConfigOverwrite}
+        hasMt={hasMt}
+        toggleHasMt={toggleHasMt}
+        hasMp={hasMp}
+        toggleHasMp={toggleHasMp}
+      />
+    </div>
   )
 }
 
