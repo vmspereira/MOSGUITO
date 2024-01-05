@@ -1,9 +1,8 @@
-from flask import Flask
-from celery import make_celery, Celery,  shared_task
-from celery.contrib.abortable import AbortableTask
-from flask_restx import Api, Resource, fields
-
+from tasks import run_mosca_task
+from flask import Flask, jsonify, request
 from logging.config import dictConfig
+
+app = Flask(__name__)
 
 dictConfig(
     {
@@ -24,60 +23,25 @@ dictConfig(
     }
 )
 
-def make_celery(app):
-    celery = Celery(app.import_name)
-    celery.conf.update(app.config["CELERY_CONFIG"])
 
-    class ContextTask(celery.Task):
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return self.run(*args, **kwargs)
+@app.route('/run_mosca', methods=['POST'])
+def run_mosca():
+    try:
+        # Get JSON data from the request
+        data = request.get_json()
 
-    celery.Task = ContextTask
-    return celery
+        # Check if 'config' key exists in the JSON data
+        if 'config' not in data:
+            return jsonify({'error': 'Missing "config" key in the request'}), 400
 
+        # Run the Celery task asynchronously
+        result = run_mosca_task.delay(data['config'])
 
-def create_app():
-    app = Flask(__name__)
-    app.config["SECRET_KEY"] = "Oz8Z7Iu&DwoQK)g%*Wit2YpE#-46vy0n"
-    app.config["CELERY_CONFIG"] = {"broker_url": "redis://redis", "result_backend": "redis://redis"}
+        return jsonify({'task_id': result.id}), 202
 
-    celery = make_celery(app)
-    celery.set_default()
-    
-    api = Api(app,
-              version="1.0",
-              title="MOSCA",
-              description="MOSCA API",)
-    
-    return app, celery, api
-
-# Celery tasks
-@shared_task(bind=True, base=AbortableTask)
-def run_mosca(self, conf):
-    
-    return 'DONE!'
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
-app, celery, api = create_app()
-
-# data models
-mosca_conf = api.model(
-    "mosca_conf",
-    {
-    },
-)
-
-# API
-@api.route("/mosca/", methods=["POST"])
-class MOSCARunner(Resource):
-    
-    @api.expect(mosca_conf)
-    def post(self):
-        conf = api.payload
-        run_mosca.delay(conf)
-        
-
-   
-if __name__ == "__main__":    
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
