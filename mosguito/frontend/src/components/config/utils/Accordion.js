@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary
 } from '@material-ui/core'
+import { Row } from 'react-bootstrap'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const Accordion = ({ title, style, children, helpMessage="" }) => {
@@ -20,15 +21,13 @@ const Accordion = ({ title, style, children, helpMessage="" }) => {
     const [isOpen, setIsOpen] = useState(false)
     const toggleIsOpen = () => setIsOpen(!isOpen)
     return (
-      <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+      <Row onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         <MuiAccordion
           expanded={isOpen}
           onChange={toggleIsOpen}
           style={style || {width: '100%'}}
         >
-          <AccordionSummary
-              expandIcon={<ExpandMoreIcon/>}
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
             {title}
           </AccordionSummary>
           <AccordionDetails>
@@ -36,7 +35,7 @@ const Accordion = ({ title, style, children, helpMessage="" }) => {
           </AccordionDetails>
         </MuiAccordion>
         {isHovering && <div className='help'><h6>{helpMessage}</h6></div>}
-      </div>
+      </Row>
   )
 }
 
