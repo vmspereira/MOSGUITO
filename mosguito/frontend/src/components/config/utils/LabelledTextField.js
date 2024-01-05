@@ -27,9 +27,10 @@ const LabelledTextField = ({ label, value, onChange, placeholder, helpMessage ="
         placeholder={placeholder}
       />
     </div>
-    <div style={{ height:"40px"}}>
+    {helpMessage &&
+    <div style={{ height:"60px"}}>
     {isHovering && <Alert variant='info'>{helpMessage}</Alert>}
-    </div>
+    </div>}
   </div>
 }
 

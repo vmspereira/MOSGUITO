@@ -13,18 +13,16 @@ const LabelledCheckbox = ({ label, checked, setChecked, helpMessage ="" }) => {
   };
 
   return <div className="container">
-    <div className="left">
-      <span>{label}</span>
-    </div>
-    <div className="right" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       <Checkbox
         checked={checked}
         onChange={setChecked}
-      />
+      /> <span>{label}</span>
     </div>
-    <div style={{ height:"40px"}}>
+    { helpMessage &&
+    <div style={{ height:"60px"}}>
     {isHovering && <div className="alert alert-info">{helpMessage}</div>}
-    </div>
+    </div>}
   </div>
 }
 

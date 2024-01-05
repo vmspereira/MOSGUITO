@@ -10,6 +10,7 @@ import General from './components/General';
 import UniprotDatabases from './components/uniprotDatabases';
 import UniprotColumns from './components/uniprotColumns';
 import KeggMaps from './components/keggmaps';
+import Experiments from './components/experiments';
 
 
 const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasMt, hasMp, toggleHasMp }) => {
@@ -125,7 +126,7 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
               description=
               {step === 3 &&
                 <div>
-                  <KeggMaps configData={configData} onConfigChange={onConfigChange}/>
+                  <KeggMaps configData={configData} onConfigChange={onConfigChange} />
                 </div>
               } />
 
@@ -134,7 +135,10 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
               description=
               {step === 4 &&
                 <div>
-
+                  <Experiments
+                    experiments={configData.experiments}
+                    setExperiments={(value) => onConfigChange('experiments', value)}
+                  />
                 </div>
               } />
 
@@ -151,10 +155,10 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
           <hr />
 
           <div>
-            <Button className="mr-4" onClick={onPrevious} disabled={step === 0} variant="dark">
+            <Button className="m-2" onClick={onPrevious} disabled={step === 0} variant="dark">
               Previous Step
             </Button>
-            <Button onClick={onNext} disabled={step === 5} variant="dark">
+            <Button className="m-2" onClick={onNext} disabled={step === 5} variant="dark">
               Next Step
             </Button>
           </div>

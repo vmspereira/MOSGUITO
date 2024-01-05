@@ -1,5 +1,7 @@
 import Accordion from './Accordion'
+import { Col,Row } from 'react-bootstrap'
 import LabelledCheckbox from "./LabelledCheckbox"
+
 
 const UniprotAccordion = ({ uniprotList, onChange, uniprotPossibilities }) => {
 
@@ -21,17 +23,20 @@ const UniprotAccordion = ({ uniprotList, onChange, uniprotPossibilities }) => {
     {
       Object.entries(uniprotPossibilities).map(([section, columns_list], index) => (
         <Accordion key={index} title={section} >
-          {
+          <Col>
+          { 
             columns_list.map(( pair , index) => (
+              <Row>
               <LabelledCheckbox
                 key={index}
                 label={pair[0]}
                 checked={uniprotList.indexOf(pair[0]) > -1}
                 setChecked={() => handleCheck(pair[0])}
-              />
+              /></Row>
               )
             )
           }
+          </Col>
         </Accordion>
       ))
     }

@@ -36,9 +36,11 @@ const LabelledSelect = ({ label, value, onChange, options, helpMessage ="" }) =>
         }
       </Select>
     </div>
-    <div style={{ height:"40px"}}>
+    {helpMessage &&
+    <div style={{ height:"60px"}}>
     {isHovering && <div className="alert alert-info">{helpMessage}</div>}
     </div>
+    }
   </div>
 }
 

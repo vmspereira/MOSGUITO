@@ -30,9 +30,11 @@ const LabelledNumberField = ({ label, value, onChange, minimum=1, step=1, helpMe
         inputProps={inputProps}
       />
     </div>
-    <div style={{ height:"40px"}}>
+    {helpMessage &&
+    <div style={{ height:"60px"}}>
     {isHovering && <div className="alert alert-info">{helpMessage}</div>}
     </div>
+    }
   </div>
 }
 
