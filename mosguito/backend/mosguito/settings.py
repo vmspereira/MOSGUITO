@@ -185,5 +185,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 MOSCA_FLASK_URL = os.getenv('MOSCA_URL','http://127.0.0.1:5000/')
 
+# Avoid using NGINX. Comment for NGINX
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

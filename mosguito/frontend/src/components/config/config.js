@@ -11,7 +11,7 @@ import UniprotDatabases from './components/uniprotDatabases';
 import UniprotColumns from './components/uniprotColumns';
 import KeggMaps from './components/keggmaps';
 import Experiments from './components/experiments';
-
+import { remoteMOSCA } from '../../actions/mosca';
 
 const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasMt, hasMp, toggleHasMp }) => {
 
@@ -25,6 +25,14 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
   const onNext = () => onChange(step + 1);
   const onPrevious = () => onChange(step - 1);
 
+  const runMOSCA = (ev) => {
+    ev.preventDefault()
+    if (configData['doAssembly']) { onConfigChange('errorModel', 'complete') }
+    const snake_case_values = {}
+    Object.keys(configData).map((key) => snake_case_values[camelToSnakeCase(key)] = configData[key])
+    jsonConfig = JSON.stringify(snake_case_values, null, 2);
+    remoteMOSCA(jsonConfig)
+  }
 
   const downloadJson = (ev) => {
     ev.preventDefault()
@@ -147,7 +155,11 @@ const Main = ({ configData, onConfigChange, onConfigOverwrite, hasMt, toggleHasM
               description=
               {step === 5 &&
                 <Col>
-                  <Row><Button variant="dark">Run the Configuration</Button></Row>
+                  <Row>
+                    <Button variant="dark" onClick={(ev) => runMOSCA(ev)}>
+                      Run the Configuration
+                    </Button>
+                  </Row>
                 </Col>
               } />
 
