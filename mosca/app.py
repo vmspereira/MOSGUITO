@@ -1,6 +1,7 @@
-from tasks import run_mosca_task
 from flask import Flask, jsonify, request
 from logging.config import dictConfig
+import json
+import subprocess
 
 app = Flask(__name__)
 
@@ -31,21 +32,41 @@ dictConfig(
 
 @app.route('/run_mosca', methods=['POST'])
 def run_mosca():
+    try:
+        # Get JSON data from the request
+        data = request.get_json()
+
+        # Check if 'config' key exists in the JSON data
+        if 'config' not in data:
+            return jsonify({'error': 'Missing "config" key in the request'}), 400
+
+        # Run the task synchronously (removed Celery)
+        result = _run_mosca_task(data['config'])
+
+        return jsonify({'output': result['output'], 'error': result['error']}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+def _run_mosca_task(config):
     #try:
-    # Get JSON data from the request
-    data = request.get_json()
+    # Create a temporary config file
+    temp_config_file = 'temp_config.json'
+    with open(temp_config_file, 'w') as temp_file:
+        json.dump(config, temp_file)
 
-    # Check if 'config' key exists in the JSON data
-    if 'config' not in data:
-        return jsonify({'error': 'Missing "config" key in the request'}), 400
+    # Run the mosca command with the temporary config file
+    command = ['mosca', '-c', temp_config_file]
+    result = subprocess.run(command, capture_output=True, text=True)
 
-    # Run the Celery task asynchronously
-    result = run_mosca_task.delay(data['config'])
+    # Remove the temporary config file
+    subprocess.run(['rm', temp_config_file])
 
-    return jsonify({'task_id': result.id}), 202
+    return {'output': result.stdout, 'error': result.stderr}
 
     #except Exception as e:
-    #    return jsonify({'error': str(e)}), 500
+    #    return {'error': e}
 
 
 if __name__ == "__main__":
